@@ -45,6 +45,11 @@ output "record_ttl" {
   value       = var.ttl
 }
 
+output "record_ttl_actual" {
+  description = "Actual TTL from the deployed record (null for alias records)."
+  value       = var.alias == null ? var.ttl : null
+}
+
 output "expected_records" {
   description = "Expected record values from configuration."
   value       = var.records

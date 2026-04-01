@@ -53,6 +53,24 @@ resource "aws_route53_record" "record" {
     }
   }
 
+
+  dynamic "geoproximity_routing_policy" {
+    for_each = var.geoproximity_routing_policy != null ? [var.geoproximity_routing_policy] : []
+    content {
+      aws_region       = try(geoproximity_routing_policy.value.aws_region, null)
+      bias             = try(geoproximity_routing_policy.value.bias, null)
+      local_zone_group = try(geoproximity_routing_policy.value.local_zone_group, null)
+
+      dynamic "coordinates" {
+        for_each = try(geoproximity_routing_policy.value.coordinates, null) != null ? geoproximity_routing_policy.value.coordinates : []
+        content {
+          latitude  = coordinates.value.latitude
+          longitude = coordinates.value.longitude
+        }
+      }
+    }
+  }
+
   dynamic "latency_routing_policy" {
     for_each = var.latency_routing_policy != null ? [var.latency_routing_policy] : []
     content {
@@ -81,6 +99,20 @@ resource "aws_route53_record" "record" {
     precondition {
       condition     = var.alias == null ? true : (var.ttl == null && var.records == null)
       error_message = "When alias is set, ttl and records must be null."
+    }
+    precondition {
+      condition = length([
+        for p in [
+          var.weighted_routing_policy,
+          var.failover_routing_policy,
+          var.geolocation_routing_policy,
+          var.geoproximity_routing_policy,
+          var.latency_routing_policy,
+          var.cidr_routing_policy,
+          var.multivalue_answer_routing_policy,
+        ] : p if p != null
+      ]) <= 1
+      error_message = "At most one routing policy may be set per record."
     }
   }
 }

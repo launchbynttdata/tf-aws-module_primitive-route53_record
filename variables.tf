@@ -130,6 +130,15 @@ variable "geolocation_routing_policy" {
     )
     error_message = "When geolocation_routing_policy is set, at least one of continent, country, or subdivision must be non-empty."
   }
+
+  validation {
+    condition = var.geolocation_routing_policy == null ? true : (
+      try(var.geolocation_routing_policy.subdivision, null) == null ||
+      try(var.geolocation_routing_policy.subdivision, "") == "" ||
+      (try(var.geolocation_routing_policy.country, null) != null && try(var.geolocation_routing_policy.country, "") != "")
+    )
+    error_message = "When subdivision is set in geolocation_routing_policy, country must also be set."
+  }
 }
 
 variable "cidr_routing_policy" {
@@ -139,6 +148,25 @@ variable "cidr_routing_policy" {
     location_name = optional(string)
   })
   default = null
+}
+
+variable "geoproximity_routing_policy" {
+  description = "Geoproximity routing policy block."
+  type = object({
+    aws_region       = optional(string)
+    bias             = optional(number)
+    local_zone_group = optional(string)
+    coordinates = optional(list(object({
+      latitude  = string
+      longitude = string
+    })))
+  })
+  default = null
+
+  validation {
+    condition     = var.geoproximity_routing_policy == null ? true : (var.geoproximity_routing_policy.bias == null || (var.geoproximity_routing_policy.bias >= -90 && var.geoproximity_routing_policy.bias <= 90))
+    error_message = "Geoproximity routing bias must be between -90 and 90."
+  }
 }
 
 variable "latency_routing_policy" {

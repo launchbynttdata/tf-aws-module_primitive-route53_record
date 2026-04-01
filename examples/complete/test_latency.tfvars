@@ -31,6 +31,7 @@ multivalue_answer_routing_policy = null
 weighted_routing_policy          = null
 failover_routing_policy          = null
 geolocation_routing_policy       = null
+geoproximity_routing_policy      = null
 latency_routing_policy = {
   region = "us-east-1"
 }

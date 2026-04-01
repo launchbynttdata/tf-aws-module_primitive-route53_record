@@ -4,9 +4,11 @@ Terraform primitive module for a single [`aws_route53_record`](https://registry.
 
 ## Overview
 
-This module wraps one Route 53 resource record set. It supports simple records (`ttl` + `records`), alias targets, and optional routing policies (weighted, failover, geolocation, latency, multivalue answer).
+This module wraps one Route 53 resource record set. It supports simple records (`ttl` + `records`), alias targets, and optional routing policies (weighted, failover, geolocation, geoproximity, latency, CIDR, multivalue answer).
 
 ## Usage
+
+### Simple record
 
 ```hcl
 module "www" {
@@ -19,6 +21,28 @@ module "www" {
   records = ["203.0.113.10"]
 }
 ```
+
+### Complete example with routing policy
+
+```hcl
+module "www_latency" {
+  source = "path/to/module"
+
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "www"
+  type    = "A"
+  ttl     = 300
+  records = ["203.0.113.10"]
+
+  set_identifier = "us-east-1"
+
+  latency_routing_policy = {
+    region = "us-east-1"
+  }
+}
+```
+
+See [`examples/complete`](examples/complete) for a full working example with all supported variables.
 
 ## Provider configuration
 
@@ -57,6 +81,7 @@ No modules.
 | <a name="input_cidr_routing_policy"></a> [cidr\_routing\_policy](#input\_cidr\_routing\_policy) | CIDR (IP-based) routing policy block. | <pre>object({<br/>    collection_id = string<br/>    location_name = optional(string)<br/>  })</pre> | `null` | no |
 | <a name="input_failover_routing_policy"></a> [failover\_routing\_policy](#input\_failover\_routing\_policy) | Failover routing policy block. | <pre>object({<br/>    type = string<br/>  })</pre> | `null` | no |
 | <a name="input_geolocation_routing_policy"></a> [geolocation\_routing\_policy](#input\_geolocation\_routing\_policy) | Geolocation routing policy block. | <pre>object({<br/>    continent   = optional(string)<br/>    country     = optional(string)<br/>    subdivision = optional(string)<br/>  })</pre> | `null` | no |
+| <a name="input_geoproximity_routing_policy"></a> [geoproximity\_routing\_policy](#input\_geoproximity\_routing\_policy) | Geoproximity routing policy block. | <pre>object({<br/>    aws_region       = optional(string)<br/>    bias             = optional(number)<br/>    local_zone_group = optional(string)<br/>    coordinates = optional(list(object({<br/>      latitude  = string<br/>      longitude = string<br/>    })))<br/>  })</pre> | `null` | no |
 | <a name="input_health_check_id"></a> [health\_check\_id](#input\_health\_check\_id) | Health check ID to associate with alias, weighted, or failover routing. | `string` | `null` | no |
 | <a name="input_latency_routing_policy"></a> [latency\_routing\_policy](#input\_latency\_routing\_policy) | Latency routing policy block. | <pre>object({<br/>    region = string<br/>  })</pre> | `null` | no |
 | <a name="input_multivalue_answer_routing_policy"></a> [multivalue\_answer\_routing\_policy](#input\_multivalue\_answer\_routing\_policy) | Set to true for multivalue answer routing. | `bool` | `null` | no |

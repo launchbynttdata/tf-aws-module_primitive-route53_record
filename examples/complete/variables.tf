@@ -138,6 +138,20 @@ variable "geolocation_routing_policy" {
   default = null
 }
 
+variable "geoproximity_routing_policy" {
+  description = "Optional geoproximity routing policy."
+  type = object({
+    aws_region       = optional(string)
+    bias             = optional(number)
+    local_zone_group = optional(string)
+    coordinates = optional(list(object({
+      latitude  = string
+      longitude = string
+    })))
+  })
+  default = null
+}
+
 variable "latency_routing_policy" {
   description = "Optional latency routing policy."
   type = object({

@@ -64,7 +64,9 @@ module "route53_record" {
   weighted_routing_policy          = var.weighted_routing_policy
   failover_routing_policy          = var.failover_routing_policy
   geolocation_routing_policy       = var.geolocation_routing_policy
+  geoproximity_routing_policy      = var.geoproximity_routing_policy
   latency_routing_policy           = var.latency_routing_policy
+  cidr_routing_policy              = var.cidr_routing_policy
   timeouts                         = var.timeouts
 }
 ```
@@ -107,6 +109,7 @@ module "route53_record" {
 | <a name="input_class_env"></a> [class\_env](#input\_class\_env) | Environment class for resource naming. | `string` | n/a | yes |
 | <a name="input_failover_routing_policy"></a> [failover\_routing\_policy](#input\_failover\_routing\_policy) | Optional failover routing policy. | <pre>object({<br/>    type = string<br/>  })</pre> | `null` | no |
 | <a name="input_geolocation_routing_policy"></a> [geolocation\_routing\_policy](#input\_geolocation\_routing\_policy) | Optional geolocation routing policy. | <pre>object({<br/>    continent   = optional(string)<br/>    country     = optional(string)<br/>    subdivision = optional(string)<br/>  })</pre> | `null` | no |
+| <a name="input_geoproximity_routing_policy"></a> [geoproximity\_routing\_policy](#input\_geoproximity\_routing\_policy) | Optional geoproximity routing policy. | <pre>object({<br/>    aws_region       = optional(string)<br/>    bias             = optional(number)<br/>    local_zone_group = optional(string)<br/>    coordinates = optional(list(object({<br/>      latitude  = string<br/>      longitude = string<br/>    })))<br/>  })</pre> | `null` | no |
 | <a name="input_health_check_id"></a> [health\_check\_id](#input\_health\_check\_id) | Optional health check ID. | `string` | `null` | no |
 | <a name="input_instance_env"></a> [instance\_env](#input\_instance\_env) | Instance of the environment (0–999). | `number` | n/a | yes |
 | <a name="input_instance_resource"></a> [instance\_resource](#input\_instance\_resource) | Instance of the resource (0–100). | `number` | n/a | yes |
@@ -135,6 +138,7 @@ module "route53_record" {
 | <a name="output_id"></a> [id](#output\_id) | Route 53 record set ID from the module. |
 | <a name="output_record_name"></a> [record\_name](#output\_record\_name) | Record name returned by the module. |
 | <a name="output_record_ttl"></a> [record\_ttl](#output\_record\_ttl) | Configured TTL for the record. |
+| <a name="output_record_ttl_actual"></a> [record\_ttl\_actual](#output\_record\_ttl\_actual) | Actual TTL from the deployed record (null for alias records). |
 | <a name="output_record_type"></a> [record\_type](#output\_record\_type) | DNS type of the record. |
 | <a name="output_zone_name"></a> [zone\_name](#output\_zone\_name) | DNS name of the private hosted zone. |
 <!-- END_TF_DOCS -->

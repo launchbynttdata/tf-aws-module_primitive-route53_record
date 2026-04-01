@@ -67,6 +67,7 @@ module "route53_record" {
   weighted_routing_policy          = var.weighted_routing_policy
   failover_routing_policy          = var.failover_routing_policy
   geolocation_routing_policy       = var.geolocation_routing_policy
+  geoproximity_routing_policy      = var.geoproximity_routing_policy
   latency_routing_policy           = var.latency_routing_policy
   cidr_routing_policy              = var.cidr_routing_policy
   timeouts                         = var.timeouts
