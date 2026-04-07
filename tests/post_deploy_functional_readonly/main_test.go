@@ -21,9 +21,10 @@ import (
 )
 
 const (
-	testConfigsExamplesFolderDefault = "../../examples/complete"
-	infraTFVarFileNameDefault        = "test.tfvars"
-	infraTFVarFileLatency            = "test_latency.tfvars"
+	testConfigsExamplesFolderDefault     = "../../examples/complete"
+	testConfigsExamplesFolderMinProvider = "../../examples/min_provider"
+	infraTFVarFileNameDefault            = "test.tfvars"
+	infraTFVarFileLatency                = "test_latency.tfvars"
 )
 
 func TestRoute53RecordCompleteReadOnly(t *testing.T) {
@@ -40,6 +41,26 @@ func TestRoute53RecordCompleteLatencyRoutingReadOnly(t *testing.T) {
 	ctx := types.CreateTestContextBuilder().
 		SetTestConfig(&testimpl.ThisTFModuleConfig{}).
 		SetTestConfigFolderName(testConfigsExamplesFolderDefault).
+		SetTestConfigFileName(infraTFVarFileLatency).
+		Build()
+
+	lib.RunNonDestructiveTest(t, *ctx, testimpl.TestComposableCompleteReadOnly)
+}
+
+func TestRoute53RecordCompleteReadOnlyMinProvider(t *testing.T) {
+	ctx := types.CreateTestContextBuilder().
+		SetTestConfig(&testimpl.ThisTFModuleConfig{}).
+		SetTestConfigFolderName(testConfigsExamplesFolderMinProvider).
+		SetTestConfigFileName(infraTFVarFileNameDefault).
+		Build()
+
+	lib.RunNonDestructiveTest(t, *ctx, testimpl.TestComposableCompleteReadOnly)
+}
+
+func TestRoute53RecordCompleteLatencyRoutingReadOnlyMinProvider(t *testing.T) {
+	ctx := types.CreateTestContextBuilder().
+		SetTestConfig(&testimpl.ThisTFModuleConfig{}).
+		SetTestConfigFolderName(testConfigsExamplesFolderMinProvider).
 		SetTestConfigFileName(infraTFVarFileLatency).
 		Build()
 

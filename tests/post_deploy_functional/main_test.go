@@ -21,9 +21,10 @@ import (
 )
 
 const (
-	testConfigsExamplesFolderDefault = "../../examples/complete"
-	infraTFVarFileNameDefault        = "test.tfvars"
-	infraTFVarFileLatency            = "test_latency.tfvars"
+	testConfigsExamplesFolderDefault     = "../../examples/complete"
+	testConfigsExamplesFolderMinProvider = "../../examples/min_provider"
+	infraTFVarFileNameDefault            = "test.tfvars"
+	infraTFVarFileLatency                = "test_latency.tfvars"
 )
 
 func TestRoute53RecordComplete(t *testing.T) {
@@ -40,6 +41,26 @@ func TestRoute53RecordCompleteLatencyRouting(t *testing.T) {
 	ctx := types.CreateTestContextBuilder().
 		SetTestConfig(&testimpl.ThisTFModuleConfig{}).
 		SetTestConfigFolderName(testConfigsExamplesFolderDefault).
+		SetTestConfigFileName(infraTFVarFileLatency).
+		Build()
+
+	lib.RunSetupTestTeardown(t, *ctx, testimpl.TestComposableComplete)
+}
+
+func TestRoute53RecordCompleteMinProvider(t *testing.T) {
+	ctx := types.CreateTestContextBuilder().
+		SetTestConfig(&testimpl.ThisTFModuleConfig{}).
+		SetTestConfigFolderName(testConfigsExamplesFolderMinProvider).
+		SetTestConfigFileName(infraTFVarFileNameDefault).
+		Build()
+
+	lib.RunSetupTestTeardown(t, *ctx, testimpl.TestComposableComplete)
+}
+
+func TestRoute53RecordCompleteLatencyRoutingMinProvider(t *testing.T) {
+	ctx := types.CreateTestContextBuilder().
+		SetTestConfig(&testimpl.ThisTFModuleConfig{}).
+		SetTestConfigFolderName(testConfigsExamplesFolderMinProvider).
 		SetTestConfigFileName(infraTFVarFileLatency).
 		Build()
 
