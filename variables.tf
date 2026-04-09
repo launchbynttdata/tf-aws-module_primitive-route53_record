@@ -27,7 +27,7 @@ variable "type" {
   validation {
     condition = contains([
       "SOA", "A", "TXT", "NS", "CNAME", "MX", "NAPTR", "PTR", "SRV", "SPF", "AAAA", "CAA", "DS",
-      "HTTPS", "SVCB"
+      "HTTPS", "SSHFP", "SVCB", "TLSA"
     ], var.type)
     error_message = "Type must be a supported Route 53 DNS record type."
   }

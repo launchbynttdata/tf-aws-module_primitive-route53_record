@@ -1,88 +1,18 @@
-# Complete example
+# min_provider
 
-Deploys a private Route 53 hosted zone in the account default VPC and creates an `A` record via the root module.
-
-## Usage
-
-The following matches [`main.tf`](./main.tf) in this directory.
-
-```hcl
-data "aws_region" "current" {}
-
-data "aws_vpcs" "default" {
-  filter {
-    name   = "isDefault"
-    values = ["true"]
-  }
-}
-
-module "resource_names" {
-  source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
-  version = "~> 2.0"
-
-  for_each = var.resource_names_map
-
-  logical_product_family  = var.logical_product_family
-  logical_product_service = var.logical_product_service
-  class_env               = var.class_env
-  instance_env            = var.instance_env
-  instance_resource       = var.instance_resource
-  cloud_resource_type     = each.value.name
-  maximum_length          = each.value.max_length
-  region                  = join("", split("-", data.aws_region.current.name))
-}
-
-resource "aws_route53_zone" "private" {
-  name = "${module.resource_names["hosted_zone"].standard}.internal"
-
-  vpc {
-    vpc_id = one(data.aws_vpcs.default.ids)
-  }
-
-  tags = var.tags
-}
-
-locals {
-  record_zone_id = coalesce(var.zone_id, aws_route53_zone.private.zone_id)
-  record_name    = coalesce(var.name, module.resource_names["record"].standard)
-}
-
-module "route53_record" {
-  source = "../.."
-
-  zone_id = local.record_zone_id
-  name    = local.record_name
-  type    = var.type
-  ttl     = var.ttl
-  records = var.records
-  alias   = var.alias
-
-  set_identifier                   = var.set_identifier
-  health_check_id                  = var.health_check_id
-  allow_overwrite                  = var.allow_overwrite
-  multivalue_answer_routing_policy = var.multivalue_answer_routing_policy
-  weighted_routing_policy          = var.weighted_routing_policy
-  failover_routing_policy          = var.failover_routing_policy
-  geolocation_routing_policy       = var.geolocation_routing_policy
-  geoproximity_routing_policy      = var.geoproximity_routing_policy
-  latency_routing_policy           = var.latency_routing_policy
-  cidr_routing_policy              = var.cidr_routing_policy
-  timeouts                         = var.timeouts
-}
-```
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.10 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.39.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.100.0 |
 
 ## Modules
 
