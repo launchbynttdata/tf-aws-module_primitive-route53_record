@@ -72,11 +72,11 @@ func verifyRoute53Record(t *testing.T, testCtx types.TestContext, client *r53.Cl
 	t.Helper()
 	ctx := context.Background()
 	opts := testCtx.TerratestTerraformOptions()
-	zoneID := terraform.Output(t, opts, "hosted_zone_id")
-	typeOut := terraform.Output(t, opts, "record_type")
-	ttlStr := terraform.Output(t, opts, "record_ttl")
-	expectedRecords := terraform.OutputList(t, opts, "expected_records")
-	fqdnOut := terraform.Output(t, opts, "fqdn")
+	zoneID := terraform.OutputContext(t, context.Background(), opts, "hosted_zone_id")
+	typeOut := terraform.OutputContext(t, context.Background(), opts, "record_type")
+	ttlStr := terraform.OutputContext(t, context.Background(), opts, "record_ttl")
+	expectedRecords := terraform.OutputListContext(t, context.Background(), opts, "expected_records")
+	fqdnOut := terraform.OutputContext(t, context.Background(), opts, "fqdn")
 
 	ttlVal, err := strconv.ParseInt(ttlStr, 10, 64)
 	require.NoError(t, err)
@@ -98,8 +98,8 @@ func upsertAndDeleteTXTRecord(t *testing.T, testCtx types.TestContext, client *r
 	t.Helper()
 	ctx := context.Background()
 	opts := testCtx.TerratestTerraformOptions()
-	zoneID := terraform.Output(t, opts, "hosted_zone_id")
-	zoneName := strings.Trim(terraform.Output(t, opts, "zone_name"), ".")
+	zoneID := terraform.OutputContext(t, context.Background(), opts, "hosted_zone_id")
+	zoneName := strings.Trim(terraform.OutputContext(t, context.Background(), opts, "zone_name"), ".")
 
 	var rnd [4]byte
 	_, err := rand.Read(rnd[:])
