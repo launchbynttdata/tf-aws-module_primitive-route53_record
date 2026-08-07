@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api:*)",
+      "Bash(git checkout:*)",
+      "Bash(gh pr:*)",
+      "Bash(terraform-docs markdown:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(terraform test:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh run:*)",
+      "Bash(gh search:*)",
+      "Bash(git config:*)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(gh repo:*)",
+      "Bash(GIT_SSH_COMMAND=\"ssh -i /Users/a267326/.ssh/id_ed25519_ntt_gh -o IdentitiesOnly=yes\" git -C /tmp/test_push push origin --delete test-branch-delete-me)"
+    ]
+  }
+}
